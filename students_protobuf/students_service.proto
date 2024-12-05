@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+option go_package = "github.com/BetterGR/students-microservice/students_protobuf";
+
+package students;
+
+service StudentsService {
+    rpc GetStudent (GetStudentRequest) returns (GetStudentResponse);
+    rpc CreateStudent (CreateStudentRequest) returns (CreateStudentResponse);
+    rpc UpdateStudent (UpdateStudentRequest) returns (UpdateStudentResponse);
+    rpc GetStudentCourses (GetStudentCoursesRequest) returns (GetStudentCoursesResponse);
+    rpc GetStudentGrades (GetStudentGradesRequest) returns (GetStudentGradesResponse);
+    rpc DeleteStudent (DeleteStudentRequest) returns (DeleteStudentResponse);
+}
+
+message GetStudentRequest {
+    string token = 1;
+    string id = 2;
+}
+
+message GetStudentResponse {
+    Student student = 1;
+}
+
+message CreateStudentRequest {
+    Student student = 1;
+}
+
+message CreateStudentResponse {
+    Student student = 1;
+}
+
+message UpdateStudentRequest {
+    string token = 1;
+    string id = 2;
+    Student student = 3;
+}
+
+message UpdateStudentResponse {
+    Student student = 1;
+}
+
+message GetStudentCoursesRequest {
+    string token = 1;
+    string id = 2;
+}
+
+message GetStudentCoursesResponse {
+    repeated Course courses = 1;
+}
+
+message GetStudentGradesRequest {
+    string token = 1;
+    string id = 2; 
+}
+
+message GetStudentGradesResponse {
+    repeated Grade grades = 1;
+}
+
+message DeleteStudentRequest {
+    string token = 1;
+    string id = 2;
+}
+
+message DeleteStudentResponse {
+}
+
+message Student {
+    string firstName = 1;
+    string secondName = 2;
+    string id = 3;
+}
+
+message Course {
+    string id = 1;
+    string name = 2;
+    string semester = 3;
+}
+
+message Grade {
+    string course_id = 1;
+    string grade = 2;
+}
