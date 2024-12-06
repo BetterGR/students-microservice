@@ -5,80 +5,106 @@ option go_package = "github.com/BetterGR/students-microservice/students_protobuf
 package students;
 
 service StudentsService {
+    // Get student.
     rpc GetStudent (GetStudentRequest) returns (GetStudentResponse);
+    // Create a new student.
     rpc CreateStudent (CreateStudentRequest) returns (CreateStudentResponse);
+    // Update a student.
     rpc UpdateStudent (UpdateStudentRequest) returns (UpdateStudentResponse);
+    // Get a student's courses in a given semester.
     rpc GetStudentCourses (GetStudentCoursesRequest) returns (GetStudentCoursesResponse);
+    // Get a student's grades in a given course and semester.
     rpc GetStudentGrades (GetStudentGradesRequest) returns (GetStudentGradesResponse);
+    // Delete a student.
     rpc DeleteStudent (DeleteStudentRequest) returns (DeleteStudentResponse);
 }
 
+// Request message for getting a student.
 message GetStudentRequest {
     string token = 1;
     string id = 2;
 }
 
+// Response message containing the student.
 message GetStudentResponse {
     Student student = 1;
 }
 
+// Request message for creating a new student.
 message CreateStudentRequest {
     Student student = 1;
 }
 
+// Response message for the result of creating a new student.
 message CreateStudentResponse {
     Student student = 1;
 }
 
+// Request message for updating an existing student.
 message UpdateStudentRequest {
     string token = 1;
-    string id = 2;
-    Student student = 3;
+    Student student = 2;
 }
 
+// Response message containing the updated student details.
 message UpdateStudentResponse {
     Student student = 1;
 }
 
+// Request message for fetching the list of courses a student is enrolled in.
 message GetStudentCoursesRequest {
     string token = 1;
-    string id = 2;
+    Student student = 2;
+    string semester = 3;
 }
 
+// Response message containing a list of courses a student is enrolled in, in a given semester.
 message GetStudentCoursesResponse {
     repeated Course courses = 1;
 }
 
+// Request message for fetching the list of grades a student has received.
 message GetStudentGradesRequest {
     string token = 1;
-    string id = 2; 
+    Student student = 2;
+    string semester = 3;
+    string course_id = 4;
 }
 
+// Response message containing a list of grades for the student, in a given course and semester.
 message GetStudentGradesResponse {
     repeated Grade grades = 1;
 }
 
+// Request message for deleting a student from the system.
 message DeleteStudentRequest {
     string token = 1;
-    string id = 2;
+    Student student = 2;
 }
 
+// Response message after deleting a student (no data is returned).
 message DeleteStudentResponse {
 }
 
+// Message representing a student with personal details.
 message Student {
     string firstName = 1;
     string secondName = 2;
     string id = 3;
+    repeated Course courses = 4;
 }
 
+// Message representing a course.
 message Course {
     string id = 1;
     string name = 2;
     string semester = 3;
+    repeated Grade grades = 4;
 }
 
+// Message representing a student's grade for a particular course and semester.
 message Grade {
-    string course_id = 1;
-    string grade = 2;
+    string semester = 1;
+    string id = 2;
+    string grade = 3;
 }
