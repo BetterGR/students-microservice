@@ -31,11 +31,17 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type StudentsServiceClient interface {
+	// Get student.
 	GetStudent(ctx context.Context, in *GetStudentRequest, opts ...grpc.CallOption) (*GetStudentResponse, error)
+	// Create a new student.
 	CreateStudent(ctx context.Context, in *CreateStudentRequest, opts ...grpc.CallOption) (*CreateStudentResponse, error)
+	// Update a student.
 	UpdateStudent(ctx context.Context, in *UpdateStudentRequest, opts ...grpc.CallOption) (*UpdateStudentResponse, error)
+	// Get a student's courses in a given semester.
 	GetStudentCourses(ctx context.Context, in *GetStudentCoursesRequest, opts ...grpc.CallOption) (*GetStudentCoursesResponse, error)
+	// Get a student's grades in a given course and semester.
 	GetStudentGrades(ctx context.Context, in *GetStudentGradesRequest, opts ...grpc.CallOption) (*GetStudentGradesResponse, error)
+	// Delete a student.
 	DeleteStudent(ctx context.Context, in *DeleteStudentRequest, opts ...grpc.CallOption) (*DeleteStudentResponse, error)
 }
 
@@ -111,11 +117,17 @@ func (c *studentsServiceClient) DeleteStudent(ctx context.Context, in *DeleteStu
 // All implementations must embed UnimplementedStudentsServiceServer
 // for forward compatibility.
 type StudentsServiceServer interface {
+	// Get student.
 	GetStudent(context.Context, *GetStudentRequest) (*GetStudentResponse, error)
+	// Create a new student.
 	CreateStudent(context.Context, *CreateStudentRequest) (*CreateStudentResponse, error)
+	// Update a student.
 	UpdateStudent(context.Context, *UpdateStudentRequest) (*UpdateStudentResponse, error)
+	// Get a student's courses in a given semester.
 	GetStudentCourses(context.Context, *GetStudentCoursesRequest) (*GetStudentCoursesResponse, error)
+	// Get a student's grades in a given course and semester.
 	GetStudentGrades(context.Context, *GetStudentGradesRequest) (*GetStudentGradesResponse, error)
+	// Delete a student.
 	DeleteStudent(context.Context, *DeleteStudentRequest) (*DeleteStudentResponse, error)
 	mustEmbedUnimplementedStudentsServiceServer()
 }

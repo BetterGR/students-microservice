@@ -5,13 +5,13 @@ import (
 	"log"
 	"time"
 
-	"google.golang.org/grpc"
 	gpb "github.com/BetterGR/students-microservice/students_protobuf"
+	"google.golang.org/grpc"
 )
 
 const (
 	// define port
-	address = "localhost:50051"
+	address = "localhost:50052"
 )
 
 func main() {
@@ -22,47 +22,16 @@ func main() {
 	}
 	defer conn.Close()
 
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
 	client := gpb.NewStudentsServiceClient(conn)
 
-	// Example: Call GetStudent
-	getStudent(client)
+	req := &gpb.GetStudentRequest{Token: "I am admin", Id: "123"}
+	response, err := client.GetStudent(ctx, req)
 
-	// Example: Call CreateStudent
-	createStudent(client)
-}
-
-func getStudent(client gpb.StudentsServiceClient) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-
-	response, err := client.GetStudent(ctx, &gpb.GetStudentRequest{
-		Token: "example-token",
-		Id:    "123",
-	})
 	if err != nil {
-		log.Fatalf("Error calling GetStudent: %v", err)
+		log.Fatalf("Error: %v", err)
 	}
 
-	log.Printf("GetStudent Response: %+v", response.Student)
-}
-
-func createStudent(client gpb.StudentsServiceClient) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-
-	newStudent := &gpb.Student{
-		FirstName:  "Jane",
-		SecondName: "Doe",
-		Id:         "124",
-	}
-
-	response, err := client.CreateStudent(ctx, &gpb.CreateStudentRequest{
-		Token:  "example-token",
-		Student: newStudent,
-	})
-	if err != nil {
-		log.Fatalf("Error calling CreateStudent: %v", err)
-	}
-
-	log.Printf("CreateStudent Response: %+v", response.Student)
+	log.Printf("FirstName: %s, SecondName: %s, ID: %s", response.Student.GetFirstName(), response.Student.GetSecondName(), response.Student.GetId())
 }
