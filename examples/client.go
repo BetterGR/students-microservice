@@ -7,6 +7,7 @@ import (
 
 	gpb "github.com/BetterGR/students-microservice/students_protobuf"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 const (
@@ -16,7 +17,7 @@ const (
 
 func main() {
 	// Establish connection with the gRPC server
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
+	conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("Failed to connect to server: %v", err)
 	}
