@@ -68,7 +68,7 @@ message GetStudentGradesRequest {
     string token = 1;
     Student student = 2;
     string semester = 3;
-    string course_id = 4;
+    string courseId = 4;
 }
 
 // Response message containing a list of grades for the student, in a given course and semester.
@@ -105,6 +105,6 @@ message Course {
 // Message representing a student's grade for a particular course and semester.
 message Grade {
     string semester = 1;
-    string id = 2;
+    string courseId = 2;
     string grade = 3;
 }
