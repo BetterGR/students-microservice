@@ -9,6 +9,7 @@ import (
 	"google.golang.org/grpc"
 
 	"k8s.io/klog/v2"
+	"flag"
 )
 
 const (
@@ -27,12 +28,12 @@ type StudentsServer struct {
 func (s *StudentsServer) GetStudent(ctx context.Context,
 	req *spb.GetStudentRequest) (*spb.GetStudentResponse, error) {
 	logger := klog.FromContext(ctx)
-	logger.Info("Received GetStudent request for:", "student_id", req.Id)
+	logger.V(5).Info("Received GetStudent request", "studentId", req.GetId())
 
 	student := &spb.Student{
 		FirstName:  "Rick",
 		SecondName: "Roll",
-		Id:         req.Id,
+		Id:         req.GetId(),
 	}
 
 	return &spb.GetStudentResponse{
@@ -44,18 +45,18 @@ func (s *StudentsServer) GetStudent(ctx context.Context,
 func (s *StudentsServer) CreateStudent(ctx context.Context,
 	req *spb.CreateStudentRequest) (*spb.CreateStudentResponse, error) {
 	logger := klog.FromContext(ctx)
-	logger.Info("Received CreateStudent request for:",
-		"student_firstName", req.Student.FirstName, "student_secondName", req.Student.SecondName)
+	logger.V(5).Info("Received CreateStudent request",
+		"firstName", req.GetStudent().GetFirstName(), "secondName", req.GetStudent().GetSecondName())
 
-	return &spb.CreateStudentResponse{Student: req.Student}, nil
+	return &spb.CreateStudentResponse{Student: req.GetStudent()}, nil
 }
 
 // UpdateStudent updates the given Student and returns them after the update.
 func (s *StudentsServer) UpdateStudent(ctx context.Context,
 	req *spb.UpdateStudentRequest) (*spb.UpdateStudentResponse, error) {
 	logger := klog.FromContext(ctx)
-	logger.Info("Received UpdateStudent request for:",
-		"student_firstName", req.Student.FirstName, "student_secondName", req.Student.SecondName)
+	logger.V(5).Info("Received UpdateStudent request",
+		"firstName", req.GetStudent().GetFirstName(), "secondName", req.GetStudent().GetSecondName())
 
 	return &spb.UpdateStudentResponse{Student: req.Student}, nil
 }
@@ -64,13 +65,13 @@ func (s *StudentsServer) UpdateStudent(ctx context.Context,
 func (s *StudentsServer) GetStudentCourses(ctx context.Context,
 	req *spb.GetStudentCoursesRequest) (*spb.GetStudentCoursesResponse, error) {
 	logger := klog.FromContext(ctx)
-	logger.Info("Received GetStudentCourses request for:",
-		"student_firstName", req.Student.FirstName, "student_secondName", req.Student.SecondName,
-		"semester", req.Semester)
+	logger.V(5).Info("Received GetStudentCourses request",
+		"firstName", req.GetStudent().GetFirstName(), "secondName", req.GetStudent().GetSecondName(),
+		"semester", req.GetSemester())
 
 	courses := []*spb.Course{
-		{Id: "C1", Name: "Mathematics", Semester: "Spring 2024"},
-		{Id: "C2", Name: "Physics", Semester: "Spring 2024"},
+		{Id: "C1", Name: "Mathematics", Semester: "S24"},
+		{Id: "C2", Name: "Physics", Semester: "S24"},
 	}
 
 	return &spb.GetStudentCoursesResponse{
@@ -83,13 +84,13 @@ func (s *StudentsServer) GetStudentCourses(ctx context.Context,
 func (s *StudentsServer) GetStudentGrades(ctx context.Context,
 	req *spb.GetStudentGradesRequest) (*spb.GetStudentGradesResponse, error) {
 	logger := klog.FromContext(ctx)
-	logger.Info("Received GetStudentGrades request for:",
-		"student_firstName", req.Student.FirstName, "student_secondName", req.Student.SecondName,
-		"course", req.CourseId, "semester", req.Semester)
+	logger.V(5).Info("Received GetStudentGrades request",
+		"firstName", req.GetStudent().GetFirstName(), "secondName", req.GetStudent().GetSecondName(),
+		"courseId", req.GetCourseId(), "semester", req.GetSemester())
 
 	grades := []*spb.Grade{
-		{Semester: "S24", Id: "C1", Grade: "A"},
-		{Semester: "W30", Id: "C2", Grade: "B"},
+		{Semester: "S24", CourseId: "C1", Grade: "100"},
+		{Semester: "S24", CourseId: "C2", Grade: "98"},
 	}
 
 	return &spb.GetStudentGradesResponse{
@@ -101,9 +102,9 @@ func (s *StudentsServer) GetStudentGrades(ctx context.Context,
 func (s *StudentsServer) DeleteStudent(ctx context.Context,
 	req *spb.DeleteStudentRequest) (*spb.DeleteStudentResponse, error) {
 	logger := klog.FromContext(ctx)
-	logger.Info("Received DeleteStudent request for ID:", "student_id",req.Student.GetId())
+	logger.V(5).Info("Received DeleteStudent request", "studentId",req.GetStudent().GetId())
 	
-	logger.Info("student was deleted")
+	logger.Info("Deleted", "studentId",req.GetStudent().GetId())
 	return &spb.DeleteStudentResponse{}, nil
 }
 
@@ -111,6 +112,8 @@ func (s *StudentsServer) DeleteStudent(ctx context.Context,
 func main() {
 	// init klog
 	klog.InitFlags(nil)
+	flag.Parse()
+
 	// create a listener on port 'address'
 	lis, err := net.Listen(connectionProtocol, address)
 	if err != nil {
