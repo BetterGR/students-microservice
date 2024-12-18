@@ -13,7 +13,7 @@ DOCKERFILE ?= Dockerfile
 DOCKER_REGISTRY ?= ghcr.io/BetterGR
 
 # Default target
-all: proto fmt vet lint
+all: proto gomod fmt vet lint
 
 # Ensure tools are installed
 ensure-gofumpt:
@@ -60,6 +60,13 @@ proto:
 	@echo [PROTO] Generating Go code from proto file...
 	@protoc $(PROTO_FLAGS)
 	@echo [PROTO] Go code generation complete.
+
+# Manage Go modules
+gomod:
+	@echo [GO-MOD] Verifying modules...
+	@go mod tidy
+	@go mod verify
+	@echo [GO-MOD] Modules verified.
 
 # Format Go code
 fmt: ensure-gofumpt ensure-gci
@@ -113,13 +120,6 @@ endif
 	@docker tag $(DOCKER_IMAGE_NAME):$(DOCKER_TAG) $(DOCKER_REGISTRY)/$(DOCKER_IMAGE_NAME):$(DOCKER_TAG)
 	@docker push $(DOCKER_REGISTRY)/$(DOCKER_IMAGE_NAME):$(DOCKER_TAG)
 	@echo [DOCKER] Docker image pushed successfully.
-
-# Manage Go modules
-gomod:
-	@echo [GO-MOD] Verifying modules...
-	@go mod tidy
-	@go mod verify
-	@echo [GO-MOD] Modules verified.
 
 # Clean up generated files
 clean:
