@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	gpb "github.com/BetterGR/students-microservice/students_protobuf"
+	gpb "github.com/BetterGR/students-microservice/protos"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -29,7 +29,6 @@ func main() {
 
 	req := &gpb.GetStudentRequest{Token: "I am admin", Id: "123"}
 	response, err := client.GetStudent(ctx, req)
-
 	if err != nil {
 		log.Fatalf("Error: %v", err)
 	}
