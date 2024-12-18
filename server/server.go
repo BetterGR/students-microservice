@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	// define port.
+	// define address.
 	address            = "localhost:50052"
 	connectionProtocol = "tcp"
 
