@@ -1,7 +1,7 @@
 # Proto settings
-SERVICE_NAME = $(notdir $(CURDIR))
-PROTO_DIR = protos
-PROTO_FILE = $(PROTO_DIR)/$(SERVICE_NAME).proto
+SERVICE_NAME ?= $(notdir $(CURDIR))
+PROTO_DIR ?= protos
+PROTO_FILE ?= $(PROTO_DIR)/$(SERVICE_NAME).proto
 PROTO_FLAGS = -I $(PROTO_DIR) $(PROTO_FILE) \
               --go_out=paths=source_relative:$(PROTO_DIR) \
               --go-grpc_out=paths=source_relative:$(PROTO_DIR)
@@ -10,7 +10,7 @@ PROTO_FLAGS = -I $(PROTO_DIR) $(PROTO_FILE) \
 DOCKER_IMAGE_NAME ?= $(SERVICE_NAME)
 DOCKER_TAG ?= latest
 DOCKERFILE ?= Dockerfile
-DOCKER_REGISTRY = #TODO
+DOCKER_REGISTRY ?= ghcr.io/BetterGR
 
 # Default target
 all: proto fmt vet lint

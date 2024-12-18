@@ -33,7 +33,7 @@ COPY . .
 
 # Build Go binary
 WORKDIR /app/server
-RUN CGO_ENABLED=0 GOOS=linux go build -o /students-ms
+RUN CGO_ENABLED=0 GOOS=linux go build -o /microservice
 
 # =====================
 # Production stage
@@ -41,10 +41,10 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o /students-ms
 FROM alpine:latest
 
 # Set executable binary
-COPY --from=builder /students-ms /students-ms
+COPY --from=builder /microservice /microservice
 
 # Expose the server port
 EXPOSE 9090
 
 # Run the Go application
-ENTRYPOINT ["/students-ms"]
+ENTRYPOINT ["/microservice"]
