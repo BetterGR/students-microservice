@@ -133,4 +133,18 @@ else
 endif
 	@echo [CLEAN] Clean up complete.
 
-.PHONY: all proto fmt run vet lint build docker-build docker-push gomod clean ensure-gofumpt ensure-gci ensure-golangci-lint
+help:
+	@echo Available targets:
+	@echo   all               Build and check everything (proto, gomod, fmt, vet, lint)
+	@echo   proto             Generate Go code from proto file
+	@echo   gomod             Manage Go modules (tidy and verify)
+	@echo   fmt               Format Go code
+	@echo   vet               Run vet checks on Go code
+	@echo   lint              Run linter on Go code
+	@echo   build             Build the server binary
+	@echo   run               Run the server
+	@echo   docker-build      Build Docker image
+	@echo   docker-push       Push Docker image to registry
+	@echo   clean             Clean up generated files
+
+.PHONY: all proto fmt run vet lint build docker-build docker-push gomod clean ensure-gofumpt ensure-gci ensure-golangci-lint help
