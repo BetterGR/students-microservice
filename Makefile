@@ -18,10 +18,11 @@ all: proto gomod fmt vet lint
 # Ensure tools are installed
 ensure-gofumpt:
 ifeq ($(OS),Windows_NT)
-	@where gofumpt > nul 2>&1 || ( \
+	@where gofumpt > temp.txt 2>&1 || ( \
 		echo [INSTALL] gofumpt not found. Installing... & \
 		go install mvdan.cc/gofumpt@latest \
 	)
+	@ del temp.txt
 else
 	@command -v gofumpt > /dev/null 2>&1 || { \
 		echo "[INSTALL] gofumpt not found. Installing..."; \
@@ -31,10 +32,11 @@ endif
 
 ensure-gci:
 ifeq ($(OS),Windows_NT)
-	@where gci > nul 2>&1 || ( \
+	@where gci > temp.txt 2>&1 || ( \
 		echo [INSTALL] gci not found. Installing... & \
 		go install github.com/daixiang0/gci@latest \
 	)
+	@ del temp.txt
 else
 	@command -v gci > /dev/null 2>&1 || { \
 		echo "[INSTALL] gci not found. Installing..."; \
@@ -44,10 +46,11 @@ endif
 
 ensure-golangci-lint:
 ifeq ($(OS),Windows_NT)
-	@where golangci-lint >nul 2>&1 || ( \
+	@where golangci-lint > temp.txt 2>&1 || ( \
 		echo [INSTALL] golangci-lint not found. Installing... & \
 		go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest \
 	)
+	@ del temp.txt
 else
 	@command -v golangci-lint >/dev/null 2>&1 || { \
 		echo "[INSTALL] golangci-lint not found. Installing..."; \
