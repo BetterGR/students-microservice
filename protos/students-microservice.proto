@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/BetterGR/students-microservice/students_protobuf";
+option go_package = "github.com/BetterGR/students-microservice/protos";
 
 package students;
 
@@ -54,7 +54,7 @@ message UpdateStudentResponse {
 // Request message for fetching the list of courses a student is enrolled in.
 message GetStudentCoursesRequest {
     string token = 1;
-    Student student = 2;
+    string id = 2;
     string semester = 3;
 }
 
@@ -66,7 +66,7 @@ message GetStudentCoursesResponse {
 // Request message for fetching the list of grades a student has received.
 message GetStudentGradesRequest {
     string token = 1;
-    Student student = 2;
+    string id = 2;
     string semester = 3;
     string courseId = 4;
 }

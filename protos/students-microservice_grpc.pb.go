@@ -4,7 +4,7 @@
 // - protoc             v5.28.3
 // source: students-microservice.proto
 
-package students_protobuf
+package protos
 
 import (
 	context "context"

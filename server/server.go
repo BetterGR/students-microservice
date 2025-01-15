@@ -105,20 +105,25 @@ func (s *StudentsServer) UpdateStudent(ctx context.Context,
 func (s *StudentsServer) GetStudentCourses(ctx context.Context,
 	req *spb.GetStudentCoursesRequest,
 ) (*spb.GetStudentCoursesResponse, error) {
-	_, err := s.VerifyToken(ctx, req.GetToken())
-	if err != nil {
-		return nil, fmt.Errorf("authentication failed: %w",
-			status.Error(codes.Unauthenticated, err.Error()))
-	}
-
 	logger := klog.FromContext(ctx)
-	logger.V(logLevelDebug).Info("Received GetStudentCourses request",
-		"firstName", req.GetStudent().GetFirstName(), "secondName", req.GetStudent().GetSecondName(),
+	logger.Info("Received GetStudentCourses request",
+		"ID", req.GetId(),
 		"semester", req.GetSemester())
 
+	if req.GetId() == "123456789" {
+		courses1 := []*spb.Course{
+			{Id: "C1", Name: "Mathematics", Semester: "S24"},
+			{Id: "C2", Name: "Physics", Semester: "S24"},
+		}
+
+		return &spb.GetStudentCoursesResponse{
+			Courses: courses1,
+		}, nil
+	}
+
 	courses := []*spb.Course{
-		{Id: "C1", Name: "Mathematics", Semester: "S24"},
-		{Id: "C2", Name: "Physics", Semester: "S24"},
+		{Id: "C3", Name: "Project", Semester: "S24"},
+		{Id: "C4", Name: "Physics II", Semester: "S24"},
 	}
 
 	return &spb.GetStudentCoursesResponse{
@@ -139,7 +144,7 @@ func (s *StudentsServer) GetStudentGrades(ctx context.Context,
 
 	logger := klog.FromContext(ctx)
 	logger.V(logLevelDebug).Info("Received GetStudentGrades request",
-		"firstName", req.GetStudent().GetFirstName(), "secondName", req.GetStudent().GetSecondName(),
+		"firstName", req.GetId(),
 		"courseId", req.GetCourseId(), "semester", req.GetSemester())
 
 	grades := []*spb.Grade{
