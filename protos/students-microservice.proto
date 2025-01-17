@@ -32,7 +32,8 @@ message GetStudentResponse {
 
 // Request message for creating a new student.
 message CreateStudentRequest {
-    Student student = 1;
+    string token = 1;
+    Student student = 2;
 }
 
 // Response message for the result of creating a new student.

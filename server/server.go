@@ -77,6 +77,12 @@ func (s *StudentsServer) GetStudent(ctx context.Context,
 func (s *StudentsServer) CreateStudent(ctx context.Context,
 	req *spb.CreateStudentRequest,
 ) (*spb.CreateStudentResponse, error) {
+	_, err := s.VerifyToken(ctx, req.GetToken())
+	if err != nil {
+		return nil, fmt.Errorf("authentication failed: %w",
+			status.Error(codes.Unauthenticated, err.Error()))
+	}
+
 	logger := klog.FromContext(ctx)
 	logger.V(logLevelDebug).Info("Received CreateStudent request",
 		"firstName", req.GetStudent().GetFirstName(), "secondName", req.GetStudent().GetSecondName())
@@ -105,6 +111,12 @@ func (s *StudentsServer) UpdateStudent(ctx context.Context,
 func (s *StudentsServer) GetStudentCourses(ctx context.Context,
 	req *spb.GetStudentCoursesRequest,
 ) (*spb.GetStudentCoursesResponse, error) {
+	_, err := s.VerifyToken(ctx, req.GetToken())
+	if err != nil {
+		return nil, fmt.Errorf("authentication failed: %w",
+			status.Error(codes.Unauthenticated, err.Error()))
+	}
+
 	logger := klog.FromContext(ctx)
 	logger.Info("Received GetStudentCourses request",
 		"ID", req.GetId(),
