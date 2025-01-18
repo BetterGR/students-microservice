@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"net"
+	"os"
 
 	spb "github.com/BetterGR/students-microservice/protos"
 	ms "github.com/TekClinic/MicroService-Lib"
@@ -17,7 +18,6 @@ import (
 
 const (
 	// define address.
-	address            = "localhost:50052"
 	connectionProtocol = "tcp"
 
 	// Debugging logs.
@@ -200,11 +200,12 @@ func main() {
 	}
 
 	// create a listener on port 'address'
-	lis, err := net.Listen(connectionProtocol, address)
+	lis, err := net.Listen(connectionProtocol, os.Getenv("STUDENTS_PORT"))
 	if err != nil {
 		klog.Error("Failed to listen:", err)
 	}
 
+	klog.Info("Starting StudentsServer on port: ", os.Getenv("STUDENTS_PORT"))
 	// create a grpc StudentsServer
 	grpcServer := grpc.NewServer()
 	spb.RegisterStudentsServiceServer(grpcServer, server)
